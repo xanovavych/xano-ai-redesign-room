@@ -3,7 +3,9 @@ import { UserDetailContext } from "@/app/_context/UserDetailContext";
 import { Button } from "@/components/ui/button";
 import { db } from "@/config/db";
 import { Users } from "@/config/schema";
+import { useUser } from "@clerk/nextjs";
 import { PayPalButtons } from "@paypal/react-paypal-js";
+import { eq } from "drizzle-orm";
 import { useRouter } from "next/navigation";
 import React, { useContext, useState } from "react";
 
@@ -30,6 +32,7 @@ function BuyCredits() {
       amount: 9.99,
     },
   ];
+  const { user } = useUser();
   const [selectedOption, setSelectedOption] = useState([]);
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
   const router = useRouter();
@@ -40,6 +43,7 @@ function BuyCredits() {
       .set({
         credits: userDetail?.credits + selectedOption?.credits,
       })
+      .where(eq(Users.email, user?.primaryEmailAddress.emailAddress))
       .returning({ id: Users.id });
     if (result) {
       setUserDetail((prev) => ({

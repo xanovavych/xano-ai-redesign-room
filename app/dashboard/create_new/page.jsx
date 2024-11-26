@@ -19,6 +19,7 @@ import AiOutputDialog from "../_components/AiOutputDialog";
 import { UserDetailContext } from "@/app/_context/UserDetailContext";
 import { db } from "@/config/db";
 import { Users } from "@/config/schema";
+import { eq } from "drizzle-orm";
 
 function CreateNew() {
   const { user } = useUser();
@@ -88,6 +89,7 @@ function CreateNew() {
       .set({
         credits: userDetail?.credits - 1,
       })
+      .where(eq(Users.email, user?.primaryEmailAddress.emailAddress))
       .returning({ id: Users.id });
 
     if (result) {

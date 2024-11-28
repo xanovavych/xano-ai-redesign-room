@@ -1,10 +1,12 @@
-import "dotenv/config";
+import { config } from "dotenv";
 import { defineConfig } from "drizzle-kit";
+
+config({ path: ".env.local" });
 
 export default defineConfig({
   schema: "./config/schema.js",
   dialect: "postgresql",
   dbCredentials: {
-    url: "postgresql://ai-room-redesign_owner:ZxQA1FpkJSI6@ep-wild-bird-a1ok6q9a.ap-southeast-1.aws.neon.tech/ai-room-redesign?sslmode=require",
+    url: process.env.NEXT_PUBLIC_DATABASE_URL,
   },
 });

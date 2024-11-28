@@ -42,8 +42,8 @@ function Listing() {
       ) : (
         <div className="mt-10">
           {/* prettier-ignore */}
-          <h2 className="font-medium text-primary text-xl mb-10">Room Studio</h2>
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <h2 className="font-bold text-primary text-xl mb-10">Interior Design Studio</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {userRoomList.map((room, index) => (
               <RoomDesignCard key={index} room={room} />
             ))}

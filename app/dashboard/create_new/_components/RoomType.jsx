@@ -10,7 +10,7 @@ import {
 function RoomType({ selectRoomType }) {
   return (
     <div>
-      <label className="text-slate-400">Select Room Type *</label>
+      <label className="text-gray-500">Select Room Type</label>
       <Select onValueChange={(value) => selectRoomType(value)}>
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Room-type" />

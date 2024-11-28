@@ -20,6 +20,12 @@ import { UserDetailContext } from "@/app/_context/UserDetailContext";
 import { db } from "@/config/db";
 import { Users } from "@/config/schema";
 import { eq } from "drizzle-orm";
+import Link from "next/link";
+// import Replicate from "replicate";
+
+// const replicate = new Replicate({
+//   auth: process.env.NEXT_PUBLIC_REPLICATE_API_TOKEN,
+// });
 
 function CreateNew() {
   const { user } = useUser();
@@ -35,38 +41,65 @@ function CreateNew() {
       ...prev,
       [fieldname]: value,
     }));
-    // console.log(formData);
+    console.log(formData, "formData");
   };
 
   const GenerateAiImage = async () => {
     setLoading(true);
-    const placeHolder = "https://i.ibb.co/tzWjbX6/airoom2.png"; //Supposed AI image that will undergo base64
+
+    //Supposed AI image that will undergo base64
+    // const placeHolder = "https://i.ibb.co/tzWjbX6/airoom2.png";
     const rawImageUrl = await SaveRawImageToFirebase();
-    const base64Image = await ConvertImageToBase64(placeHolder);
-    const fileName = Date.now() + "_ai.png";
-    const storageRef = ref(storage, "room-redesign/" + fileName);
-    await uploadString(storageRef, base64Image, "data_url").then((resp) => {
-      console.log("AI File Uploaded...");
-    });
-    const downloadUrl = await getDownloadURL(storageRef);
-    console.log(downloadUrl);
+    console.log(formData?.roomType, "FIRST formData?.roomType");
+    console.log(formData?.addtionalReq, "FIRST formData?.additionalReq");
+    // const output = await ReplicateRun(rawImageUrl);
+    // const base64Image = await ConvertImageToBase64(output);
+    // const fileName = Date.now() + "_ai.png";
+    // const storageRef = ref(storage, "room-redesign/" + fileName);
+    // await uploadString(storageRef, base64Image, "data_url").then((resp) => {
+    //   console.log("AI File Uploaded...");
+    // });
+    // const downloadUrl = await getDownloadURL(storageRef);
+    // console.log(downloadUrl);
 
     const result = await axios.post("/api/redesign-room", {
       imageUrl: rawImageUrl, //rawImageUrl before
-      aiImageUrl: downloadUrl, //JUST ADDED - NOT IN ORIGINAL
+      //JUST ADDED - NOT IN ORIGINAL
+      // aiImageUrl: downloadUrl,
       roomType: formData?.roomType,
       designType: formData?.designType,
-      addtionalReq: formData?.addtionalReq,
+      additionalReq: formData?.additionalReq,
       userEmail: user?.primaryEmailAddress.emailAddress,
     });
     console.log(result);
+    console.log(formData?.addtionalReq, "formData?.additionalReq");
     // SHOULD BE DATA>HELLO LOG FROM ROUTE.JSX
     // setAiOutputImage(result.data.result);
     await updateUserCredits();
-    setAiOutputImage(downloadUrl);
+    setAiOutputImage(result.data.result);
     setOpenOutputDialog(true);
     setLoading(false);
   };
+
+  // const ReplicateRun = async (rawImageUrl) => {
+  //   const input = {
+  //     image: rawImageUrl,
+  //     prompt:
+  //       "A" +
+  //       formData?.roomType +
+  //       "with a" +
+  //       formData?.designType +
+  //       "style interior" +
+  //       formData?.addtionalReq,
+  //   };
+
+  //   const output = await replicate.run(
+  //     "adirik/interior-design:76604baddc85b1b4616e1c6475eca080da339c8875bd4996705440484a6eac38",
+  //     { input }
+  //   );
+  //   console.log(output);
+  //   return output;
+  // };
 
   const SaveRawImageToFirebase = async () => {
     const fileName = Date.now() + "_raw.png";
@@ -116,12 +149,12 @@ function CreateNew() {
   //   return downloadUrl;
   // };
 
-  async function ConvertImageToBase64(imageUrl) {
-    const resp = await axios.get(imageUrl, { responseType: "arraybuffer" });
-    const base64ImageRaw = Buffer.from(resp.data).toString("base64");
+  // async function ConvertImageToBase64(imageUrl) {
+  //   const resp = await axios.get(imageUrl, { responseType: "arraybuffer" });
+  //   const base64ImageRaw = Buffer.from(resp.data).toString("base64");
 
-    return "data:image/png;base64," + base64ImageRaw;
-  }
+  //   return "data:image/png;base64," + base64ImageRaw;
+  // }
 
   return (
     <div>
@@ -148,7 +181,10 @@ function CreateNew() {
             Generate
           </Button>
           {/* prettier-ignore*/}
-          <p className="text-sm text-slate-400 mb-52">NOTE: 1 CREDIT will be consumed upon each Generated Room</p>
+          <p className="text-sm text-slate-400 mb-2 mt-2">NOTE: 1 CREDIT will be consumed upon each Generated Room</p>
+          <Link href={"/dashboard"}>
+            <Button className="w-full mt-5">Go back to Dashboard</Button>
+          </Link>
         </div>
       </div>
       <CustomLoading loading={loading} />

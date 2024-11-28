@@ -12,20 +12,21 @@ function ImageSelection({ selectedImage }) {
 
   return (
     <div>
-      <label>Select image of your room</label>
+      <label className="text-gray-500">
+        Upload an Image of an Interior (Required)
+      </label>
       <div className="mt-3">
         <label htmlFor="upload-image">
           {/* prettier-ignore */}
           <div
-            className={`p-28 border rounded-xl border-dotted flex justify-center border-primary bg-slate-200 cursor-pointer hover:shadow-lg 
+            className={`p-1 border flex justify-center border-primary bg-slate-200 cursor-pointer hover:shadow-lg 
                 ${file && "p-0 bg-white"}`}>
             {!file ? (
               // prettier-ignore
               <Image src={"/imageupload.png"} width={70} height={70} alt="imageupload" />
             ) : (
               // prettier-ignore
-              <Image src={URL.createObjectURL(file)} width={300} height={300} alt="imageupload"
-                className="w-[300px] h-[300px] object-cover" />
+              <Image src={URL.createObjectURL(file)} width={700} height={700} alt="imageupload"/>
             )}
           </div>
         </label>

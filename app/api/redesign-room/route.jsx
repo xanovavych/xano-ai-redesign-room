@@ -12,23 +12,59 @@ const replicate = new Replicate({
 
 export async function POST(req) {
   // prettier-ignore
-  const {imageUrl, aiImageUrl, roomType, designType, additonalReq, userEmail } = await req.json();
+  const {imageUrl, roomType, designType, additionalReq, userEmail } = await req.json();
+  console.log(additionalReq, "additionalReq");
   try {
+    const input = {
+      image: imageUrl,
+      prompt:
+        "A " +
+        roomType +
+        " with a " +
+        designType +
+        " style interior. " +
+        additionalReq,
+    };
+
+    const output = await replicate.run(
+      "adirik/interior-design:76604baddc85b1b4616e1c6475eca080da339c8875bd4996705440484a6eac38",
+      { input }
+    );
+
+    // const output = "https://i.ibb.co/tzWjbX6/airoom2.png";
+    console.log(output);
+
+    const base64Image = await ConvertImageToBase64(output);
+    const fileName = Date.now() + "_ai.png";
+    const storageRef = ref(storage, "room-redesign/" + fileName);
+    await uploadString(storageRef, base64Image, "data_url").then((resp) => {
+      console.log("AI File Uploaded...");
+    });
+    const downloadUrl = await getDownloadURL(storageRef);
+    console.log(downloadUrl);
+
     const dbResult = await db
       .insert(AiGeneratedImage)
       .values({
         roomType: roomType,
         designType: designType,
         orgImage: imageUrl,
-        aiImage: aiImageUrl,
+        aiImage: downloadUrl,
         userEmail: userEmail,
       })
       .returning({ id: AiGeneratedImage.id });
     console.log(dbResult);
-    return NextResponse.json({ result: dbResult[0] });
+    return NextResponse.json({ result: downloadUrl });
   } catch (e) {
     return NextResponse.json({ error: e });
   }
+}
+
+async function ConvertImageToBase64(imageUrl) {
+  const resp = await axios.get(imageUrl, { responseType: "arraybuffer" });
+  const base64ImageRaw = Buffer.from(resp.data).toString("base64");
+
+  return "data:image/png;base64," + base64ImageRaw;
 }
 
 // async function ConvertImageToBase64(imageUrl) {

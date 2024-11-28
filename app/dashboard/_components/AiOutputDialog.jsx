@@ -17,14 +17,19 @@ import { Button } from "@/components/ui/button";
 function AiOutputDialog({ openDialog, closeDialog, orgImage, aiImage }) {
   return (
     <AlertDialog open={openDialog}>
-      <AlertDialogContent>
+      <AlertDialogContent className="xl:max-w-fit">
         <AlertDialogHeader>
           <AlertDialogTitle>RESULT:</AlertDialogTitle>
           <ReactBeforeSliderComponent
             firstImage={{ imageUrl: orgImage }}
             secondImage={{ imageUrl: aiImage }}
           />
-          <Button onClick={() => closeDialog(false)}>CLOSE</Button>
+          <div className="flex justify-between">
+            <a href={aiImage} target="_blank">
+              <Button>DOWNLOAD</Button>
+            </a>
+            <Button onClick={() => closeDialog(false)}>CLOSE</Button>
+          </div>
         </AlertDialogHeader>
       </AlertDialogContent>
     </AlertDialog>

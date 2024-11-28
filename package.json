@@ -26,7 +26,7 @@
     "react": "^18",
     "react-before-after-slider-component": "^1.1.8",
     "react-dom": "^18",
-    "replicate": "^1.0.1",
+    "replicate": "^0.33.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7"
   },

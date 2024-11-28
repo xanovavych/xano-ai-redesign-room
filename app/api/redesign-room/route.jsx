@@ -13,7 +13,7 @@ const replicate = new Replicate({
 export async function POST(req) {
   // prettier-ignore
   const {imageUrl, roomType, designType, additionalReq, userEmail } = await req.json();
-  console.log(additionalReq, "additionalReq");
+  // console.log(additionalReq, "additionalReq"); -RECENT REMOVAL
   try {
     const input = {
       image: imageUrl,
@@ -26,22 +26,22 @@ export async function POST(req) {
         additionalReq,
     };
 
-    const output = await replicate.run(
-      "adirik/interior-design:76604baddc85b1b4616e1c6475eca080da339c8875bd4996705440484a6eac38",
-      { input }
-    );
+    // const output = await replicate.run(
+    //   "adirik/interior-design:76604baddc85b1b4616e1c6475eca080da339c8875bd4996705440484a6eac38",
+    //   { input }
+    // );
 
-    // const output = "https://i.ibb.co/tzWjbX6/airoom2.png";
-    console.log(output);
+    const output = "https://i.ibb.co/JBDw5pN/out-1.png";
+    // console.log(output); -RECENT REMOVAL
 
     const base64Image = await ConvertImageToBase64(output);
     const fileName = Date.now() + "_ai.png";
     const storageRef = ref(storage, "room-redesign/" + fileName);
     await uploadString(storageRef, base64Image, "data_url").then((resp) => {
-      console.log("AI File Uploaded...");
+      // console.log("AI File Uploaded..."); -RECENT REMOVAL
     });
     const downloadUrl = await getDownloadURL(storageRef);
-    console.log(downloadUrl);
+    // console.log(downloadUrl); -RECENT REMOVAL
 
     const dbResult = await db
       .insert(AiGeneratedImage)
@@ -53,7 +53,7 @@ export async function POST(req) {
         userEmail: userEmail,
       })
       .returning({ id: AiGeneratedImage.id });
-    console.log(dbResult);
+    // console.log(dbResult); -RECENT REMOVAL
     return NextResponse.json({ result: downloadUrl });
   } catch (e) {
     return NextResponse.json({ error: e });

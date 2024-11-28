@@ -25,7 +25,7 @@ function Listing() {
         eq(AiGeneratedImage.userEmail, user?.primaryEmailAddress.emailAddress)
       );
     setUserRoomList(result);
-    console.log(result);
+    // console.log(result); -RECENT REMOVAL
   };
 
   return (

@@ -12,7 +12,7 @@ export async function POST(req) {
       .select()
       .from(Users)
       .where(eq(Users.email, user?.primaryEmailAddress.emailAddress));
-    console.log("User", userInfo);
+    // console.log("User", userInfo); -RECENT REMOVAL
 
     //if not, will add user to DB
     if (userInfo?.length == 0) {

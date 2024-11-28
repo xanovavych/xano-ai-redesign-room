@@ -5,7 +5,7 @@ import React, { useState } from "react";
 function ImageSelection({ selectedImage }) {
   const [file, setFile] = useState();
   const onFileSelected = (event) => {
-    console.log(event.target.files[0]);
+    // console.log(event.target.files[0]); -RECENT REMOVAL
     setFile(event.target.files[0]);
     selectedImage(event.target.files[0]);
   };

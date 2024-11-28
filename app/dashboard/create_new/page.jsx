@@ -41,7 +41,7 @@ function CreateNew() {
       ...prev,
       [fieldname]: value,
     }));
-    console.log(formData, "formData");
+    // console.log(formData, "formData");
   };
 
   const GenerateAiImage = async () => {
@@ -50,8 +50,7 @@ function CreateNew() {
     //Supposed AI image that will undergo base64
     // const placeHolder = "https://i.ibb.co/tzWjbX6/airoom2.png";
     const rawImageUrl = await SaveRawImageToFirebase();
-    console.log(formData?.roomType, "FIRST formData?.roomType");
-    console.log(formData?.addtionalReq, "FIRST formData?.additionalReq");
+
     // const output = await ReplicateRun(rawImageUrl);
     // const base64Image = await ConvertImageToBase64(output);
     // const fileName = Date.now() + "_ai.png";
@@ -71,8 +70,8 @@ function CreateNew() {
       additionalReq: formData?.additionalReq,
       userEmail: user?.primaryEmailAddress.emailAddress,
     });
-    console.log(result);
-    console.log(formData?.addtionalReq, "formData?.additionalReq");
+    // console.log(result); -RECENT REMOVAL
+
     // SHOULD BE DATA>HELLO LOG FROM ROUTE.JSX
     // setAiOutputImage(result.data.result);
     await updateUserCredits();
@@ -104,14 +103,14 @@ function CreateNew() {
   const SaveRawImageToFirebase = async () => {
     const fileName = Date.now() + "_raw.png";
     const imageRef = ref(storage, "room-redesign/" + fileName);
-    console.log(imageRef, "imageRef");
+    // console.log(imageRef, "imageRef"); -RECENT REMOVAL
 
     await uploadBytes(imageRef, formData.image).then((resp) => {
-      console.log("File Uploaded...");
+      // console.log("File Uploaded..."); -RECENT REMOVAL
     });
 
     const downloadUrl = await getDownloadURL(imageRef);
-    console.log(downloadUrl);
+    // console.log(downloadUrl); -RECENT REMOVAL
     setOrigImage(downloadUrl);
     return downloadUrl;
   };

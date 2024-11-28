@@ -37,7 +37,7 @@ function BuyCredits() {
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
   const router = useRouter();
   const onPaymentSuccess = async () => {
-    console.log("Payment sucess");
+    // console.log("Payment sucess"); -RECENT REMOVAL
     const result = await db
       .update(Users)
       .set({
